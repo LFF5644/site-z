@@ -1,0 +1,44 @@
+<!DOCTYPE  html>
+
+<html>
+
+<title>My title</title>
+
+<body>
+
+<h2>Hallo Welt</h2>
+<button onclick="alert('Wustest du das ich ein Button bin?')" id="button1">ERROR</button><br>
+<button onclick="document.getElementById('button1').innerText='ich kann nicht nerven!'" id="button2">ERROR</button><br>
+<input id="numPad1" value="1" type="number"/>
+<input id="numPad2" value="1" type="number"/>
+<button id="Button_adiren" onclick="addiren(false)">ADDIRE 1 + 1</button>
+<p id="info"/>
+<checkbox id="Checkbox_alert"/>
+<h2>Tschüss Welt</h2>
+
+<script>
+document.getElementById("button1").innerText="Ich kann reden"
+document.getElementById("button2").innerText="ich kann naemen ändern!"
+function addiren(alert_=true,num1="NOTHING",num2="NOTHING"){
+	let erg=0
+	
+	if(num1=="NOTHING"){
+	num1=Number(document.getElementById("numPad1").value);
+	num2=Number(document.getElementById("numPad2").value);
+	}
+	erg=num1+num2
+	
+	if(alert_==true){
+		alert(erg)
+	}
+	else if(alert_==false){
+		console.log(String(erg))
+	}
+	document.getElementById("info").innerText=num1+" + "+num2+" = "+erg
+	return erg
+}
+</script>
+
+</body>
+
+</html>

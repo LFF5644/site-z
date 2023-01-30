@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<?=globals.tmp_head("PNIP / PING",input)?>
+</head>
+<body>
+<p><button onclick="clearInterval(interval);">STOP</button></p>
+<p id="text"></p>
+<script>
+const text="GNIP / PING, ";
+const time=100;
+
+let counter=-1;
+const interval=setInterval(()=>{
+	const p=GetId("text");
+	let text_say="";
+	let index=-1;
+	for(t of text){index+=1;}
+	for(t of text){
+		counter+=1;
+		if(text[counter]==" "){
+			if(counter>index){counter=0;}
+			if(counter+1>index){counter=0;}
+			if(counter!=0){counter+=1;}
+			text_say=" "+text[counter];
+			break;
+		}
+		if(counter>index){counter=0;}
+		text_say=text[counter];
+		//console.log("C: "+counter+", text_say: "+text_say+", index: "+index);
+		break;
+	}
+
+	p.innerText+=text_say;
+},time);
+</script>
+</body>
+</html>

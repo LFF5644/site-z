@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--CREATED AT: 10.08.2022 UM 10:39-->
+<html>
+<head>
+	<?=globals.tmp_head("MSG TEST",input)?>
+</head>
+<body>
+<center>
+<h1><?=globals.tmp_nameAsA()?> - Notification</h1>
+<button id="button_askP" onclick="Notification.requestPermission().then(GetPermissions)">ask for permissions</button>
+<div id="div_genMSG" class="hidden">
+	<p><label>MSG Title: <input type="text" id="input_msg_title" placeholder="Title" title="Notification Title"></label></p>
+	<p><label>MSG Text : <input type="text" id="input_msg_text"  placeholder="Text"  title="Notification Text" ></label></p>
+	<p><label>MSG ICON : <input type="text" id="input_msg_icon"  placeholder="ICON"  title="Notification ICON" value="/favicon.png"></label></p>
+	<p><label>MSG Command : <br><textarea id="textarea_onclick"  rows="3" placeholder="JavaScript Command onclick" title="Notification if msg clicked">alert("OK");</textarea></label></p>
+	<p><label>Play Sound - ONCLICK: <input type="checkbox" id="input_sound_onclick" title="Play a Sound if User open Notification" ></label></p>
+	<p><label>Play Sound - ONCLOSE: <input type="checkbox" id="input_sound_onclose" title="Play a Sound if User close Notification" disabled></label></p>
+	<p><button onclick="GenNotification()">GEN MSG BOX</button></p>
+
+</div>
+</center>
+<script>
+let recht=false;
+
+function GetPermissions(result){
+	console.log(result)
+	if(result=="granted"){
+		GetId("button_askP").remove()
+		GetId("div_genMSG").className="";
+		recht=true;
+	}else{if(confirm("PLEASE allow Notifications! to use this page\nask for permissions?")){Notification.requestPermission().then(GetPermissions)}}
+}
+function GenNotification(){
+	if(!recht){alert("no permissions!")}
+
+	let title=GetId("input_msg_title").value;
+	let text= GetId("input_msg_text") .value;
+	let icon= GetId("input_msg_icon") .value;
+	let soundClick=GetId("input_sound_onclick").checked;
+	let soundClose=GetId("input_sound_onclose").checked;
+	let cmd=GetId("textarea_onclick").value;
+
+	let args={};
+	args.body=text;
+	args.icon=icon;
+	let msg=new Notification(title,args);
+
+	if(soundClick){
+		cmd=`setTimeout(()=>{{audio=let=new Audio("/files/sounds/ding.mp3");audio.play()};\n${cmd}},0)`
+	}else{
+		cmd=`setTimeout(()=>{${cmd}},0)`
+	}
+	msg.onclick=()=>{execute(cmd)}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!--CREATED 11.10.2022 17:25-->
+<html>
+<head>
+	<?=globals.tmp_head("AUDIO TEST",input)?>
+</head>
+<body>
+
+<script>
+const audio = new Audio('//l3p3.de/media/notes/machdasrichtig.mp3');
+audio.preservesPitch = false;
+
+onkeydown=(event)=>{
+	audio.currentTime=0;
+	audio.playbackRate=(event.keyCode-64)/10;
+	audio.play();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<?=globals.tmp_head("TRY POST!")?>
+</head>
+<body>
+<form method="POST" enctype="multipart/form-data">
+	<input type="file" name="file" value="<?=input.file.filename?>">
+	<button>POST!</button>
+</form>
+<?
+delete input.body
+if(input.file!=undefined){
+	const file=input.file;
+	const {encodeBase64}=globals.functions;
+	file.data_buffer=file.data;
+	file.data=file.data.toString();
+	?><p>Filename: <slim class=green><?=file.filename?></slim></p><?
+	?><p>File-Type: <slim class=green><?=file.type?></slim></p><?
+	
+	if(file.type.startsWith("text/")){
+		?><textarea rows="<?=file.data.split('\n').length?>"><?=file.data?></textarea><?
+	}
+	else if(file.type.startsWith("image/")){
+		?><img alt="<?=file.filename?>" src="data:<?=file.type?>;base64,<?=encodeBase64(file.data_buffer)?>"><?
+	}
+}
+?>
+<!--<textarea><?=JSON.stringify(input,null,2)?></textarea>-->
+</body>
+</html>

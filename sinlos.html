@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<?=globals.tmp_head("SINNNN LOSSS!")?>
+	<style>
+		@font-face{font-family:Minecraft;src:url("/files/fonts/Minecraft.otf")}
+		body{font-family: Minecraft;font-size:2em;}
+	</style>
+</head>
+<body>
+<center><h1>LEBEN IST SINN LOSS</h1></center>
+<p id=p_spam></p>
+<script>
+	const wörter=["pech","haha"];
+
+	function spam(){
+		let res="";
+
+		for(wort of wörter){
+			res+=wort+", "
+		}
+		GetId("p_spam").innerHTML+=res;
+	}
+
+	setInterval(spam,100);
+</script>
+</body>
+</html>

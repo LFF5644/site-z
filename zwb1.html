@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ZWB</title>
+	<link rel="stylesheet" type="text/css" href="/css/main.css">
+	<script src="/scripts/import.js"></script>
+</head>
+<body>
+<center>
+
+<input class="green" style="text-align: center;" type="text" id="input_name" value="lando"><br>
+<button class="orange" onclick="UPPER()">ENTER</button>
+<br>
+<p class="green" id="finishP">NONE</p>
+<script>
+
+function UPPER(){
+	let name=GetId("input_name").value;
+	let t=""
+	t=ConvertText(name.substr(0,1),1)
+	t=t+ConvertText(name.substr(1),0)
+	GetId("finishP").innerText=t;
+}
+</script>
+</center>
+</body>
+</html>

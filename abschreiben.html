@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--CREATED: 21.08.2022 (LENN GEB) UM 11:33-->
+<html>
+<body>
+<head>
+	<?=globals.tmp_head(input.x!="0"&&input.x!=undefined?input.x+"x ABSCHREIBEN":"ABSCHREIBEN",input)?>
+</head>
+<body>
+<center>
+
+<h1>Text Abschreiben</h1>
+<form onsubmit="this.text.value=ESC(this.text.value)" style="display: <?=input.text==''||input.text==undefined?'unset':'none'?>">
+	<p><label>Text: <textarea name=text placeholder="Text"></textarea></label></p>
+	<p><label>Wie oft: <input style="max-width: 50px;" type=number name=x placeholder="5x (5 mal)" step=1 min=1 max=1000 value=5></label></p>
+	<button class="styledBTNMint">OK LOS GEHT's</button>
+</form>
+
+	<?
+		if(input.text!=""&&input.text!=undefined){
+			if(input.x!="0"&&input.x!=undefined){
+				const x=Number(input.x);
+				const text=unESC(input.text);
+
+				let index=0
+				let _;
+				for(_ of new Array(x)){
+					index+=1
+					?><p><code class=red><?=index?> </code><?=text?></p>
+	<?
+				}
+			}
+		}
+	?>
+</center>
+<script>
+//ChangeURL(location.pathname)
+</script>
+</body>
+</html>

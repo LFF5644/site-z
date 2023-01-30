@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<?=globals.tmp_head("Wortsuche Example")?>
+</head>
+<body>
+
+<img src="/files/pdf/wortsuche.jpeg" width="500px" alt="wortsuche">
+<p>
+	<label>
+		Wort: 
+		<input autofocus id="input" placeholder="World" onkeydown="console.log(event.key)">
+		<button onclick="check(GetId('input'),this);" class=styledBTNMint>Prüfen / Absenden</button>
+	</label>
+</p>
+<p>Deine Antworten: <code id="label_words"></code></p>
+<p>Verbleibende Wörter: <code id="label_remaining">...</code></p>
+<div id=next style="display:none;">
+[[Aufgabe ABSCHLIEßEN|wortsuche finish]]
+</div>
+<script>
+const words=["frau","hund","adoptieren","strasse","helfen"];
+let corecct=[];
+
+function check(input,btn){
+	if(input.disabled){
+		btn.disabled=true;
+		btn.style.color="red";
+		return;
+	}
+	let word=0;
+	let found=false;
+	for(word of words){
+		if(word==input.value.toLowerCase()){
+			input.value="";
+			input.select();
+			if(corecct.includes(word)){
+				alert("Das hast du Bereits eingegeben! ;)");
+				return;
+			}
+			corecct.push(word.toLowerCase());
+			alert("RICHTIG!");
+			found=true;
+			update();
+		}
+	}
+	if(!found){
+		alert("Leider Falsch... :(");
+		input.value="";
+		input.select();
+	}
+}
+function update(){
+	GetId("label_remaining").innerText=words.length-corecct.length;
+	let word=0;
+	let text="";
+	for(word of corecct){
+		text+=word.toUpperCase()+", ";
+	}
+	text=text.substr(0,text.length-2);
+	GetId("label_words").innerText=text;
+
+	if(words.length-corecct.length==0){
+		alert("DU HAST ES GESCHAFT!");
+		GetId("next").style.display="block";
+		GetId("input").disabled=true;
+	}
+
+}
+update();
+</script>
+</body>
+</html>

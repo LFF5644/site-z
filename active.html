@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--CREATED 05.09.2022 UM 15:25-->
+<html>
+<head>
+	<?=globals.tmp_head("IS TAB ACTIVE?",input)?>
+</head>
+<body>
+<center>
+<h1>Ist der Tab Activ?</h1>
+<div id="div_hiddenHistory" style="max-width: 95px;"></div>
+</center>
+<?=input.mobil?'<script>if(!confirm("Diese Seite ist noch nicht auf mobilen geräten (Handy, Tablet,...) getestet worden\\nMöchten Sie fortfahren?")){history.back();}else{alert("OK, aber es können komische BUGS auftreten!")}</script>':"\n"?>
+<script>
+let first=true;
+const sounds={};
+sounds.activ=new Audio("/files/sounds/addUSB.wav");
+sounds.inactiv=new Audio("/files/sounds/removeUSB.wav");
+sounds.boom=new Audio("/files/sounds/beepBOOM.mp3");
+sounds.interval=null;
+
+function onHide(){
+	if(doc.hidden){
+		doc.title=": (  Inactiv!";
+		sounds.activ.pause();
+		sounds.activ.currentTime=0;
+		sounds.inactiv.play();
+
+		sounds.interval=setInterval(()=>{sounds.boom.play()},5000)
+
+		let dateNow="";
+		const date=new Date();
+		dateNow+=String(date.getHours()).padStart(2,"0")+":"
+		dateNow+=String(date.getMinutes()).padStart(2,"0")+":"
+		dateNow+=String(date.getSeconds()).padStart(2,"0")
+		
+		let element_p=CreateElement("p");
+		let before="";
+		if(first){first=false;}
+		else{before="<span>- - - - - - - -</span><br><br>";}
+		element_p.innerHTML=`${before}<code>${dateNow}</code><br><span class=red>Seite Inactiv</span>`
+		AttrCSSSet(element_p,"text-align","left");
+		AppendChild(element_p,"div_hiddenHistory",false);
+
+	}else{
+		doc.title="; )  Activ!";
+		sounds.inactiv.pause();
+		sounds.inactiv.currentTime=0;
+		sounds.activ.play();
+		if(sounds.interval!=null){
+			clearInterval(sounds.interval);
+			sounds.interval=null;
+		}
+
+		let dateNow="";
+		const date=new Date();
+		dateNow+=String(date.getHours()).padStart(2,"0")+":"
+		dateNow+=String(date.getMinutes()).padStart(2,"0")+":"
+		dateNow+=String(date.getSeconds()).padStart(2,"0")
+		
+		let element_p=CreateElement("p");
+		element_p.innerHTML=`<code>${dateNow}</code><br><span class=green>Seite Activ!</span><br>`
+		AttrCSSSet(element_p,"text-align","left");
+		AppendChild(element_p,"div_hiddenHistory",false);
+	}
+}
+doc.addEventListener('visibilitychange',onHide);
+</script>
+</body>
+</html>

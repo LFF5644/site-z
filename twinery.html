@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!-- CREATED 17.10.2022 13:16-->
+<html>
+<head>
+	<?=globals.tmp_head("twinery",input)?>
+</head>
+<body>
+<video id="video" src="/files/videos/NeverGonnaGiveYouUp-480p.mp4" autoplay=on autobuffer loop></video>
+<script>
+const video=GetId("video");
+try{
+	video.play();
+}catch(e){con.log("VIDEO CANT PLAY!")}
+
+</script>
+</body>
+</html>

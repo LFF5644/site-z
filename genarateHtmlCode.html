@@ -1,0 +1,40 @@
+<!DOCTYPE  html>
+
+<html>
+<HEAD>
+	<title>HTML Genarator</title>
+	<link rel="shortcut icon" href="favicon.png">
+	<meta charset="utf-8">
+</HEAD>
+<body>
+<button id="button_create" onclick="addAChild('label','elements','Hallo ich bin nun Besser als du haha');addAChild('br','elements',null)">i m a button haha</button>
+<button id="button_del" onclick="DELETE()">DELETE ALL</button>
+<class id="elements"></class>
+
+<script>
+//document.getElementById("button1").value;
+//document.getElementById("button2").innerText="text"
+//function addiren(alert_=true,num1="NOTHING",num2="NOTHING"){}
+elements=[]
+function addAChild (element="p",class_name="elements",text="no text") {
+	toClass=document.getElementById(class_name)
+	var my_element = document.createElement(element);
+	elements.push(my_element)
+	if(text!=null){my_element.innerText=text}
+	toClass.appendChild(my_element);
+}
+function DELETE(){
+	//elements.append="lolo"
+	console.log("DELETEING '"+elements.length+"' items...")
+	for(element of elements){
+		toClass.removeChild(element)
+	}
+	console.log("DELETEING '"+elements.length+"' items DELETEET!")
+	elements=[]
+	//console.log("text")
+}
+</script>
+
+</body>
+
+</html>
