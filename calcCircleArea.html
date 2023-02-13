@@ -17,7 +17,9 @@
 		<p><code>Pi = π = <span id="span_pi"></span></code></p>
 		<p><label>Radius (r): <input id=input_radius value=3,5 placeholder=3,5 type=number oninput="calc(event.target.value)"></label></p>
 		<h2><code id=output></code></h2>
-		<fieldset id=fieldset_round_result>
+		<p><label><input type=checkbox onchange="showHide('fieldset_round_result',this.checked)"> Rundung fürs Ergebnis Anzeigen</label></p>
+		<p><label><input type=checkbox onchange="showHide('fieldset_round_pi',this.checked)"> Rundung für <code>π</code> Anzeigen</label></p>
+		<fieldset id=fieldset_round_result class=hidden>
 			<legend>Ergebnis Runden</legend>
 			<p><label><input type=radio name=round_result value=2 checked> 2 Nachkommastellen</label></p>
 			<p><label><input type=radio name=round_result value=4> 4 Nachkommastellen</label></p>
@@ -25,7 +27,7 @@
 			<p><label><input type=radio name=round_result value=0> Ganzzahl</label></p>
 			<p><label><input type=radio name=round_result value=-1> Gar nicht</label></p>
 		</fieldset>
-		<fieldset id=fieldset_round_pi>
+		<fieldset id=fieldset_round_pi class=hidden>
 			<legend><code>π</code> Runden</legend>
 			<p><label><input type=radio name=round_pi value=2 checked> 2 Nachkommastellen</label></p>
 			<p><label><input type=radio name=round_pi value=4> 4 Nachkommastellen</label></p>
@@ -95,7 +97,11 @@
 				document.getElementById("span_pi").innerText=pi_label;
 				calc();
 			}
-			
+			function showHide(id,show){
+				const element=document.getElementById(id);
+				element.className=show?"":"hidden";
+			}
+
 			let radio="";
 			for(radio of document.getElementsByName("round_result")){
 				radio.onchange=(event=>{
