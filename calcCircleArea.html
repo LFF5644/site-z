@@ -1,0 +1,80 @@
+<?
+	const {importHead}=globals.functions;
+?><!DOCTYPE html>
+<html>
+	<head>
+		<?=importHead({
+			input,
+			title:"Flächeninhalt Berechnen (Kreis)",
+			script:[],
+			tabs:2,
+		})?>
+	</head>
+	<body>
+		<h1>Flächeninhalt Berechnen (Kreis)</h1>
+		<p>Bitte den gemessenen Radius vom Kreis eingeben!</p>
+		<p>Dabei wird die Formel genutzt: <code>A = r * r * <span title=3.14159265359>PI</span></code></p>
+		<p><label>Radius (r): <input id=input_radius value=3,5 placeholder=3,5 type=number oninput="calc(event.target.value)"></label></p>
+		<h2><code id=output></code></h2>
+		<fieldset>
+			<legend>Runden</legend>
+			<p><label><input type=radio name=round value=2 checked> 2 Nachkommastellen</label></p>
+			<p><label><input type=radio name=round value=4> 4 Nachkommastellen</label></p>
+			<p><label><input type=radio name=round value=8> 8 Nachkommastellen</label></p>
+			<p><label><input type=radio name=round value=0> Ganzzahl</label></p>
+			<p><label><input type=radio name=round value=-1> Gar nicht</label></p>
+		</fieldset>
+
+		<script>
+			const outputLabel=document.getElementById("output");
+			const PI=3.14159265359;
+
+			function calc(number){
+				outputLabel.style.color="unset";
+				//number=Number(number);
+
+				if(isNaN(number)||number<=0){
+					outputLabel.innerHTML="Es werden <b>nur</b> Nummern Akzeptiert! die grösser als 0 sind!";
+					outputLabel.style.color="red";
+					return false;
+				}
+				if(number==Infinity){
+					outputLabel.innerHTML="Die Nummer ist zu groß!";
+					outputLabel.style.color="red";
+					return false;
+				}
+
+				const result=PI*number*number;
+				let resultRound=Math.round(result);
+				const round=Number(getRadioValue("round"));
+				if(round>0){
+					let x=result*Number("1e"+round);
+					x=Math.round(x);
+					x=x/Number("1e"+round);
+					resultRound=x;
+				}
+				outputLabel.innerHTML=`Ao = <span title=Ergebnis style="color:green">${String(round==-1?result:resultRound).split(".").join("<b>,</b>")}</span>`;
+				console.log(number);
+				return true;
+			}
+			function getRadioValue(name){
+				const radios=document.getElementsByName(name);
+				let radio="";
+				for(radio of radios){
+					if(radio.checked){
+						return radio.value;
+					}
+				}
+				return false;
+			}
+
+			let radio="";
+			for(radio of document.getElementsByName("round")){
+				radio.onchange=(event=>{
+					calc(document.getElementById("input_radius").value);
+				})
+			}
+			delete radio;
+		</script>
+	</body>
+</html>
