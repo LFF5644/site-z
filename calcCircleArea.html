@@ -13,25 +13,36 @@
 	<body>
 		<h1>Flächeninhalt Berechnen (Kreis)</h1>
 		<p>Bitte den gemessenen Radius vom Kreis eingeben!</p>
-		<p>Dabei wird die Formel genutzt: <code>A = r * r * <span title=3.14159265359>PI</span></code></p>
+		<p>Dabei wird die Formel genutzt: <code>A = r * r * <span title=3.14159265359 id=span_title_pi>π</span></code></p>
+		<p><code>Pi = π = <span id="span_pi"></span></code></p>
 		<p><label>Radius (r): <input id=input_radius value=3,5 placeholder=3,5 type=number oninput="calc(event.target.value)"></label></p>
 		<h2><code id=output></code></h2>
-		<fieldset>
-			<legend>Runden</legend>
-			<p><label><input type=radio name=round value=2 checked> 2 Nachkommastellen</label></p>
-			<p><label><input type=radio name=round value=4> 4 Nachkommastellen</label></p>
-			<p><label><input type=radio name=round value=8> 8 Nachkommastellen</label></p>
-			<p><label><input type=radio name=round value=0> Ganzzahl</label></p>
-			<p><label><input type=radio name=round value=-1> Gar nicht</label></p>
+		<fieldset id=fieldset_round_result>
+			<legend>Ergebnis Runden</legend>
+			<p><label><input type=radio name=round_result value=2 checked> 2 Nachkommastellen</label></p>
+			<p><label><input type=radio name=round_result value=4> 4 Nachkommastellen</label></p>
+			<p><label><input type=radio name=round_result value=8> 8 Nachkommastellen</label></p>
+			<p><label><input type=radio name=round_result value=0> Ganzzahl</label></p>
+			<p><label><input type=radio name=round_result value=-1> Gar nicht</label></p>
+		</fieldset>
+		<fieldset id=fieldset_round_pi>
+			<legend><code>π</code> Runden</legend>
+			<p><label><input type=radio name=round_pi value=2 checked> 2 Nachkommastellen</label></p>
+			<p><label><input type=radio name=round_pi value=4> 4 Nachkommastellen</label></p>
+			<p><label><input type=radio name=round_pi value=8> 8 Nachkommastellen</label></p>
+			<p><label><input type=radio name=round_pi value=-1> Gar nicht</label></p>
 		</fieldset>
 
 		<script>
 			const outputLabel=document.getElementById("output");
-			const PI=3.14159265359;
+			const piDefault=3.14159265359;
+			let PI=piDefault;
 
-			function calc(number){
+			function calc(number=null){
+				if(number===null){
+					number=document.getElementById("input_radius").value;
+				}
 				outputLabel.style.color="unset";
-				//number=Number(number);
 
 				if(isNaN(number)||number<=0){
 					outputLabel.innerHTML="Es werden <b>nur</b> Nummern Akzeptiert! die grösser als 0 sind!";
@@ -46,7 +57,7 @@
 
 				const result=PI*number*number;
 				let resultRound=Math.round(result);
-				const round=Number(getRadioValue("round"));
+				const round=Number(getRadioValue("round_result"));
 				if(round>0){
 					let x=result*Number("1e"+round);
 					x=Math.round(x);
@@ -54,7 +65,6 @@
 					resultRound=x;
 				}
 				outputLabel.innerHTML=`Ao = <span title=Ergebnis style="color:green">${String(round==-1?result:resultRound).split(".").join("<b>,</b>")}</span>`;
-				console.log(number);
 				return true;
 			}
 			function getRadioValue(name){
@@ -67,14 +77,40 @@
 				}
 				return false;
 			}
-
+			function setPI(comma=null){
+				if(comma===null){comma=Number(getRadioValue("round_pi"))}
+				if(comma>0){
+					let x=piDefault*Number("1e"+comma);
+					x=Math.round(x);
+					x=x/Number("1e"+comma);
+					PI=x;
+				}
+				else if(comma==-1){
+					PI=piDefault;
+				}
+				console.log("SET PI: "+PI);
+				console.log("comma: "+comma);
+				const pi_label=String(PI).split(".").join(",");
+				document.getElementById("span_title_pi").title=pi_label;
+				document.getElementById("span_pi").innerText=pi_label;
+				calc();
+			}
+			
 			let radio="";
-			for(radio of document.getElementsByName("round")){
+			for(radio of document.getElementsByName("round_result")){
 				radio.onchange=(event=>{
-					calc(document.getElementById("input_radius").value);
+					calc();
+				})
+			}
+			for(radio of document.getElementsByName("round_pi")){
+				radio.onchange=(event=>{
+					setPI();
 				})
 			}
 			delete radio;
+
+			setPI();
+
 		</script>
 	</body>
 </html>
