@@ -1,0 +1,37 @@
+<?
+	const {importHead}=globals.functions;
+?><!DOCTYPE html>
+<!--Created 26.03.2023 at 23:36-->
+<html>
+	<head>
+		<?=importHead({
+			input,
+			title:"Cursor",
+			tabs:2,
+			script:[],
+		})?>
+		<style>
+			html{
+				height: 100%;
+				width: 100%;
+				cursor: url(/files/img/cursor.svg), auto;
+			}
+			div{
+				margin: 20px;
+				height: 50px;
+				width: 50px;
+				border: 4px green solid;
+				border-radius: 5px;
+				background-color: gray;
+			}
+			.pointer{
+				cursor: url(/files/img/cursorPointer.svg), auto;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Cursor</h1>
+		<div class="pointer"></div>
+		<button class="pointer">lol</button>
+	</body>
+</html>
