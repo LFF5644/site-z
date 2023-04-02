@@ -1,31 +1,51 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<?=globals.tmp_head("TRY POST!")?>
-</head>
-<body>
-<form method="POST" enctype="multipart/form-data">
-	<input type="file" name="file" value="<?=input.file.filename?>">
-	<button>POST!</button>
-</form>
 <?
-delete input.body
-if(input.file!=undefined){
-	const file=input.file;
-	const {encodeBase64}=globals.functions;
-	file.data_buffer=file.data;
-	file.data=file.data.toString();
-	?><p>Filename: <slim class=green><?=file.filename?></slim></p><?
-	?><p>File-Type: <slim class=green><?=file.type?></slim></p><?
-	
-	if(file.type.startsWith("text/")){
-		?><textarea rows="<?=file.data.split('\n').length?>"><?=file.data?></textarea><?
-	}
-	else if(file.type.startsWith("image/")){
-		?><img alt="<?=file.filename?>" src="data:<?=file.type?>;base64,<?=encodeBase64(file.data_buffer)?>"><?
-	}
-}
-?>
-<!--<textarea><?=JSON.stringify(input,null,2)?></textarea>-->
-</body>
+	const {importHead}=globals.functions;
+?><!DOCTYPE html>
+<html>
+	<head>
+		<?=importHead({
+			input,
+			title:"Try Post!",
+			script:[],
+			tabs: 2,
+		})?>
+	</head>
+	<body>
+		<h1>Post</h1>
+		<form method=POST enctype=multipart/form-data>
+			<p><input type=file name=file></p>
+			<p><button>POST!</button></p>
+		</form>
+<?
+			delete input.body
+			const tabs="\t\t";
+			let html="";
+			if(input.file!=undefined){
+				const file=input.file;
+
+				html+=`${tabs}<p>Datei-Name: <slim style=color:green>${file.filename}</slim></p>\n`;
+				html+=`${tabs}<p>Datei-Größe in Bytes: <b>${file.data.length}</b> B</p>\n`;
+				html+=`${tabs}<p>Datei-Größe in KiloBytes: <b>${Math.round(file.data.length/1024*1e3)/1e3}</b> KB</p>\n`;
+				html+=`${tabs}<p>Datei-Größe in MegaBytes: <b>${Math.round(file.data.length/1024/1024*1e3)/1e3}</b> MB</p>\n`;
+				html+=`${tabs}<p>Datei-Größe in GigaBytes: <b>${Math.round(file.data.length/1024/1024/1024*1e3)/1e3}</b> GB</p>\n`;
+				html+=`${tabs}<p>Datei-Type: <slim style=color:green>${file.type}</slim></p>\n`;
+				
+				if(
+					file.type.startsWith("text/")||
+					file.type==="application/x-javascript"
+				){
+					html+=`${tabs}<textarea style=width:100%;height:300px>${file.data.toString("utf-8").trim().split("\r").join("").split("\n").join("&#10;")}</textarea>\n`;
+				}
+				else if(file.type.startsWith("image/")){
+					html+=`${tabs}<img alt="${file.filename}" src="data:${file.type};base64,${file.data.toString("base64")}">\n`;
+				}
+				else if(file.type.startsWith("video/")){
+					html+=`${tabs}<video controls autoplay width=100% alt="${file.filename}" src="data:${file.type};base64,${file.data.toString("base64")}"></video>\n`;
+				}
+				else if(file.type.startsWith("audio/")){
+					html+=`${tabs}<audio controls autoplay width=100% alt="${file.filename}" src="data:${file.type};base64,${file.data.toString("base64")}"></audio>\n`;
+				}
+			}
+		?><?=html?>
+	</body>
 </html>
