@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Canvas</title>
+</head>
+<body>
+	<h1>Canvas</h1>
+	<canvas id="canvas_main" width="200" height="100" style="border:1px solid black;"></canvas>
+	<script>
+
+		function writePixel(x,y){
+			canvasContent.strokeRect(x,y,1,1);
+		}
+		function getRandomPos(width,height){
+			return [
+				Math.max(width,Math.round(Math.random()*width)),
+				Math.max(height,Math.round(Math.random()*height)),
+			];
+		}
+
+		const canvas=document.getElementById("canvas_main");
+		const canvasContent=canvas.getContext("2d");
+		canvasContent.moveTo(0,0);
+		canvasContent.lineTo(200,100);
+		canvasContent.stroke();
+
+		setInterval(()=>{
+			//return;
+			const [x,y]=getRandomPos(200,100);
+			writePixel(x,y);
+			canvasContent.stroke();
+		},1e3);
+
+	</script>
+</body>
+</html>
