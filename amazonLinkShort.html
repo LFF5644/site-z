@@ -1,0 +1,64 @@
+<?
+	const {importHead}=globals.functions;
+
+?><!DOCTYPE html>
+<html>
+<head>
+	<?=importHead({
+		tabs:1,
+		input,
+		title: "Amazon Links Kürtzen"
+	})?>
+</head>
+<body>
+	<h1>Amazon Links Kürtzen</h1>
+	<p>Link*: <input required id=link hint="https://amazon.com/Taschen-Lampe/dp/H2s4/?bla=1&spam=1"></p>
+	<p>Beschreibung: <input id=description title="Kann leer gelassen werden."></p>
+	<p>Aktion: <button onclick="submit();">CONFIRM</button></p>
+	<hr>
+	<p><a id=a target=_blank onclick="this.href&&prompt('LINK KOPIEREN',this.href)">Amazon-Out-Link</a></p>
+	<p><textarea readonly id=textarea>OUTPUT</textarea></p>
+	<script>
+		function submit(){
+			console.log("test");
+			let url=document.getElementById("link").value;
+			let description=escape(document.getElementById("description").value.split(" ").join("_"));
+			const allowedProtocols=["https://","http://"];
+			const allowedStarts=[
+				"amazon.de",
+				"amazon.com",
+				"www.amazon.de",
+				"www.amazon.com"
+			];
+			let startsWith='';
+			let found=false;
+			loop: for(var urlStart of allowedStarts){
+				for(var protocol of allowedProtocols){
+					startsWith=protocol+urlStart;
+					if(url.startsWith(startsWith)){
+						url=url.substring(startsWith.length);
+						startsWith=startsWith.split("www.").join("");
+						found=true;
+						break loop;
+					}
+				}
+			}
+			if(!found||!url.includes("/dp/")){
+				alert("URL hat nicht das erlaubte pettern\n\nhttps://amazon.com/*/dp/*")
+				return;
+			}
+
+			let urlItems=url.split("/").filter(item=>item);
+			const index=urlItems.findIndex(item=>item==="dp");
+			if(index===-1){alert("nicht erlaubter link!"); return;}
+			const package=urlItems[index+1];
+
+			url=startsWith+"/"+(description?(description+"/"):'')+'dp/'+package;
+			document.getElementById("a").href=url;
+			document.getElementById("textarea").innerText=url;
+
+
+		}
+	</script>
+</body>
+</html>
