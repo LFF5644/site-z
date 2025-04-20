@@ -1,0 +1,7 @@
+<?
+
+log("LOGGING IP: "+input.ip);
+
+require("fs").appendFileSync("/tmp/ipLogger.txt",new Date()+" "+input.ip+" "+input.user_agent+"\n");
+
+?><?="Deine IP ist: "+input.ip?>
