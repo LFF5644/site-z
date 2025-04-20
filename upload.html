@@ -2,10 +2,12 @@
 	const UPLOAD_FOLDER="data/uploads/";
 	const UPLOADS_CSV=UPLOAD_FOLDER+"uploads.csv";
 
-	const {importHead}=globals.functions;
+	const {importHead,allowedPath}=globals.functions;
 	const account=service_require_try("server/account/account.new");
 	const fsp=require("fs/promises");
 	
+	allowedPath({request,response},"/upload");
+
 	let folder="anonym";
 	let nickname;
 	account:{
@@ -58,9 +60,9 @@
 	else{
 		log("USER: "+folder+"; visited, not uploaded.");
 ?>		<p>Lade Dateien hoch die auf Lando's Server landen sollen, ich nutze diese Funktion bspw. um Dateien von dem Handy auf den Server zu bekommen.</p>
-		<p>Info: Dein Upload wird im <code>uploads/<?=folder?></code> abgelegt werden. <?=nickname?("Angemeldet als: "+nickname):"Datei Upload vollkommen Anonym, nicht nachverfolgbar"?>.</p>
+		<p>Info: Dein Upload wird in <code>uploads/<?=folder?></code> abgelegt werden. <?=nickname?("Angemeldet als: "+nickname):"Datei Upload vollkommen Anonym, nicht nachverfolgbar"?>.</p>
 		<form onsubmit="return lock_all();" method=post enctype=multipart/form-data>
-			<input type=file name=file>
+			<input type=file name=file required>
 			<p><button id=btn_submit>DATEI HOCHLANDEN</button></p>
 		</form>
 		<div style=display:none id=view_uploading>
