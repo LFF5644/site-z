@@ -3,15 +3,23 @@
 <html>
 <head>
 	<?=globals.tmp_head("twinery",input)?>
+	<style>body{background-color:black;margin: 50px;text-align: center;}</style>
 </head>
-<body>
-<video id="video" src="/files/videos/NeverGonnaGiveYouUp-480p.mp4" autoplay=on autobuffer loop></video>
+<body onload="play();" onclick="play();" onmousemove="play();" onkeydown="play();">
+<button style=font-size:25px id=btn onclick="play();" onmousemove="play();">Anzeigen</button>
+<video id="video" src="/files/videos/NeverGonnaGiveYouUp-480p.mp4" onclick="play();" onmousemove="play();" autoplay autobuffer loop></video>
 <script>
-const video=GetId("video");
-try{
-	video.play();
-}catch(e){con.log("VIDEO CANT PLAY!")}
-
+	async function play(){
+		const video=GetId("video");
+		try{
+			await video.play();
+		}catch(e){
+			con.log("VIDEO CANT PLAY!");
+			return;
+		}
+		document.getElementById("btn").style.display="none";
+	}
+	play();
 </script>
 </body>
 </html>
