@@ -11,18 +11,36 @@
 <center><h1>LEBEN IST SINN LOSS</h1></center>
 <p id=p_spam></p>
 <script>
-	const wörter=["pech","haha"];
+	const words=["pech","haha"];
+	let wordCount=0;
+	let charCount=0;
+	let scrollHeight=0;
+	const charsPerFrame=1;
 
 	function spam(){
 		let res="";
+		let counter=0;
+		while(counter<charsPerFrame){
+			//console.log(wordCount,charCount);
+			res+=words[wordCount].substring(charCount,charCount+1);
 
-		for(wort of wörter){
-			res+=wort+", "
+			counter+=1;
+			charCount+=1;
+			if(charCount>words[wordCount].length){wordCount+=1;charCount=0;res+=", "}
+			if(wordCount>words.length-1){wordCount=0;charCount=0;}
 		}
+		
 		GetId("p_spam").innerHTML+=res;
+		if(scrollHeight!==document.body.scrollHeight){
+			scrollHeight=document.body.scrollHeight;
+			window.scrollTo({
+				top: scrollHeight,
+				behavior: "smooth",
+			});
+		}
 	}
 
-	setInterval(spam,100);
+	setInterval(spam,50);
 </script>
 </body>
 </html>
