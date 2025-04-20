@@ -1,4 +1,5 @@
 <?
+throw 404;
 const child_process=require("child_process");
 
 
