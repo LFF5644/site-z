@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meine Route</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map {
+            height: calc(100vh - 50px);
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        // Karte initialisieren
+        var map = L.map('map').setView([51.1657, 10.4515], 6); // Deutschland-Zentrum
+
+        // OpenStreetMap als Hintergrundkarte
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Test Karte von ChatGPT erstellt mit OpenSource Karte :)',
+        }).addTo(map);
+
+        // Deine Standorte als Koordinaten
+        var routeCoords = [
+            [48.137154, 11.576124], // München
+            [52.520008, 13.404954], // Berlin
+            [50.110924, 8.682127]   // Frankfurt
+        ];
+
+        // Linie zeichnen
+        var polyline = L.polyline(routeCoords, {color: 'green'}).addTo(map);
+
+        // Karte auf die Route zoomen
+        map.fitBounds(polyline.getBounds());
+    </script>
+    <p>Dies ist eine karte mit 3 linien!</p>
+</body>
+</html>
