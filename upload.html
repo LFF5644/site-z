@@ -1,0 +1,81 @@
+<?
+	const UPLOAD_FOLDER="data/uploads/";
+	const UPLOADS_CSV=UPLOAD_FOLDER+"uploads.csv";
+
+	const {importHead}=globals.functions;
+	const account=service_require_try("server/account/account.new");
+	const fsp=require("fs/promises");
+	
+	let folder="anonym";
+	let nickname;
+	account:{
+		if(!account) break account;
+		const {allowed,data}=account.authUserByInput(input);
+		if(!allowed) break account;
+		folder=data.account.username;
+		nickname=data.account.nickname;
+	};
+
+	const tryDirCreate=async dir=>{
+		try{
+			await fsp.mkdir(dir);
+			return true;
+		}catch(e){return false};
+	}
+?><!DOCTYPE html>
+<html>
+	<head>
+		<?=importHead({
+			input,
+			title: "Dateien-Uploader",
+			tabs: 2,
+		})?>
+	</head>
+	<body>
+		<h1>Dateien-Uploader</h1>
+<?
+	if(input.file){
+		log("USER: "+folder+"; UPLOADED: "+input.file.filename);
+		await tryDirCreate(UPLOAD_FOLDER);
+		const target_folder=UPLOAD_FOLDER+folder+"/";
+		await tryDirCreate(target_folder);
+		const d=new Date();
+		const target_name=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}_${input.file.filename}`;
+		const target=target_folder+target_name;
+		await fsp.writeFile(target,input.file.data);
+		// UPLOAD_TIME; FILENAME; FILE_TYPE; FILE_SRC; FILE_SIZE
+		await fsp.appendFile(UPLOADS_CSV,[
+			d.getTime(),
+			input.file.filename,
+			input.file.type,
+			target,
+			input.file.data.length,
+		].join("; ")+"\n");
+		delete input.file.data;
+?>		<p>Datei Erfolgreich Hochgeladen.</p>
+<?
+	}
+	else{
+		log("USER: "+folder+"; visited, not uploaded.");
+?>		<p>Lade Dateien hoch die auf Lando's Server landen sollen, ich nutze diese Funktion bspw. um Dateien von dem Handy auf den Server zu bekommen.</p>
+		<p>Info: Dein Upload wird im <code>uploads/<?=folder?></code> abgelegt werden. <?=nickname?("Angemeldet als: "+nickname):"Datei Upload vollkommen Anonym, nicht nachverfolgbar"?>.</p>
+		<form onsubmit="return lock_all();" method=post enctype=multipart/form-data>
+			<input type=file name=file>
+			<p><button id=btn_submit>DATEI HOCHLANDEN</button></p>
+		</form>
+		<div style=display:none id=view_uploading>
+			<progress style=width:100%></progress>
+			<p><b>Datei wird hochgeladen bitte hab Geduld...</b></p>
+		</div>
+		<script>
+			function lock_all(){
+				console.log("file is uploading...");
+				document.getElementById("btn_submit").disabled=true;
+				document.getElementById("view_uploading").style.display="";//.disabled=true;
+				return true;
+			}
+		</script>
+<?
+	}
+?>	</body>
+</html>
